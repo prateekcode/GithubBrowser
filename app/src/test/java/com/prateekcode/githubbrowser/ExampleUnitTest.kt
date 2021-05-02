@@ -53,9 +53,9 @@ class ExampleUnitTest {
     @Test
     fun getOpenIssue(){
         runBlocking {
-            val openIssue = instance.api.getOpenIssues("prateekcode", "URLShortner", "open")
+            val openIssue = instance.api.getOpenIssues("nvbn", "thefuck", "open")
             println(openIssue)
-            println(openIssue.body())
+            println(openIssue.body()!!.size)
         }
     }
 }

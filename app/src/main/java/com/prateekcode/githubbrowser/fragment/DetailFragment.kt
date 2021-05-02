@@ -10,8 +10,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.prateekcode.githubbrowser.R
 import com.prateekcode.githubbrowser.databinding.FragmentDetailBinding
+import com.prateekcode.githubbrowser.db.RepoDatabase
+import com.prateekcode.githubbrowser.db.Repodao
+import com.prateekcode.githubbrowser.viewmodel.ApiViewModel
+import com.prateekcode.githubbrowser.viewmodel.ApiViewModelFactory
 
 
 class DetailFragment(repoName: String, description: String, htmUrl: String, ownerId: String) : Fragment() {
@@ -21,6 +26,8 @@ class DetailFragment(repoName: String, description: String, htmUrl: String, owne
     val description = description
     val htmlUrl = htmUrl
     val ownerId = ownerId
+    var viewModel: ApiViewModel? =null
+    lateinit var repodao: Repodao
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,14 +37,22 @@ class DetailFragment(repoName: String, description: String, htmUrl: String, owne
         binding.detailTitle.text = repositoryName
         binding.detailDescription.text = description
 
+        //Initializing the database
+        repodao = RepoDatabase.getDatabase(context!!).repoDao()
+
         binding.detailMaterialToolbar.setNavigationOnClickListener {
             fragmentManager!!.popBackStack()
         }
 
+        binding.branchesIv.setOnClickListener {
+            replaceFragment(CommitFragment("master"))
+        }
+
+        issueCounter()
         binding.detailMaterialToolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.delete_repo_btn -> {
-                    replaceFragment(CommitFragment())
+                    replaceFragment(CommitFragment("master"))
                     true
                 }
                 R.id.open_repo_btn -> {
@@ -56,6 +71,19 @@ class DetailFragment(repoName: String, description: String, htmUrl: String, owne
         }
 
         return binding.root
+    }
+
+    private fun issueCounter(){
+        val factory = ApiViewModelFactory(repodao)
+        viewModel = ViewModelProvider(this, factory).get(ApiViewModel::class.java)
+        viewModel!!.getOpenIssue(ownerId, repositoryName, "open")
+        viewModel!!.openIssueResponse.observe(viewLifecycleOwner, {response->
+            if (response.isSuccessful){
+                if (response.body()!!.isNotEmpty()){
+                    binding.issueTv.text = "ISSUES(${response!!.body()!!.size})"
+                }
+            }
+        })
     }
 
     private fun replaceFragment(fragment: Fragment) {

@@ -9,9 +9,10 @@ import androidx.databinding.DataBindingUtil
 import com.prateekcode.githubbrowser.R
 import com.prateekcode.githubbrowser.databinding.FragmentCommitBinding
 
-class CommitFragment : Fragment() {
+class CommitFragment(branchName:String) : Fragment() {
 
     lateinit var binding: FragmentCommitBinding
+    val branchName = branchName
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -22,6 +23,8 @@ class CommitFragment : Fragment() {
         binding.commitMaterialToolbar.setNavigationOnClickListener {
             fragmentManager!!.popBackStack()
         }
+
+        binding.commitMaterialToolbar.subtitle = branchName
 
         return binding.root
     }
