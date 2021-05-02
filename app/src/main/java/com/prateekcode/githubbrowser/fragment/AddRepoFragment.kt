@@ -1,5 +1,6 @@
 package com.prateekcode.githubbrowser.fragment
 
+
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,6 +13,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.prateekcode.githubbrowser.R
 import com.prateekcode.githubbrowser.databinding.FragmentAddRepoBinding
+import com.prateekcode.githubbrowser.db.RepoDatabase
+import com.prateekcode.githubbrowser.db.Repodao
+import com.prateekcode.githubbrowser.db.Repotity
 import com.prateekcode.githubbrowser.viewmodel.ApiViewModel
 import com.prateekcode.githubbrowser.viewmodel.ApiViewModelFactory
 
@@ -20,12 +24,20 @@ class AddRepoFragment : Fragment() {
 
     lateinit var binding: FragmentAddRepoBinding
     var viewModel: ApiViewModel? =null
+    lateinit var repodao: Repodao
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_repo, container, false)
+
+        //Initializing the database
+        repodao = RepoDatabase.getDatabase(context!!).repoDao()
+
+
+
 
         binding.addMaterialToolbar.setNavigationOnClickListener {
             fragmentManager!!.popBackStack()
@@ -50,14 +62,25 @@ class AddRepoFragment : Fragment() {
     }
 
     private fun findTheRepo(userName:String, repoName:String){
-        val factory = ApiViewModelFactory()
+        val factory = ApiViewModelFactory(repodao)
         viewModel = ViewModelProvider(this, factory).get(ApiViewModel::class.java)
         viewModel!!.githubRepository(userName, repoName)
         viewModel!!.repoResponse.observe(viewLifecycleOwner, { response ->
             if (response.isSuccessful) {
                 Log.d(TAG, "Name of the user: ${response.body()!!.name}")
+                var repoName = response.body()!!.name
+                var descriptionOfRepo = response.body()!!.description
+                if (descriptionOfRepo==null){
+                    descriptionOfRepo = "Not Found"
+                }else{
+                    descriptionOfRepo
+                }
+                val htmlUrl = response.body()!!.html_url
                 Log.d(TAG, "Description of the user: ${response.body()!!.description}")
                 Log.d(TAG, "Html Url of the user: ${response.body()!!.html_url}")
+                val repo = Repotity(repoName, descriptionOfRepo, htmlUrl)
+                viewModel!!.insertTheRepo(repo)
+                fragmentManager!!.popBackStack()
             }
         })
     }
