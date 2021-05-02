@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp"
+    app:strokeColor="@color/black"
+    app:strokeWidth="1dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/date_text_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:text="10 Mar 21"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_margin="4dp"
+            android:background="@color/purple_200"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:text="a30efa"
+            android:textColor="@color/black" />
+
+        <View
+            android:id="@+id/horizontal_line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/date_text_tv"
+            android:background="@color/black" />
+
+        <TextView
+            android:id="@+id/commit_message_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/horizontal_line"
+            android:layout_margin="8dp"
+            android:text="@string/commit_string"
+            android:textColor="@color/black" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/avatar_iv"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_below="@id/commit_message_tv"
+            android:layout_margin="8dp"
+            android:src="@drawable/ic_avatar" />
+
+        <TextView
+            android:id="@+id/user_name_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/commit_message_tv"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="14dp"
+            android:layout_toEndOf="@id/avatar_iv"
+            android:text="User Name"
+            android:textColor="@color/black"
+            android:textSize="12sp" />
+
+    </RelativeLayout>
+
+</com.google.android.material.card.MaterialCardView>

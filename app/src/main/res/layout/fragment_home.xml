@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.HomeFragment">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/home_material_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/black"
+        app:menu="@menu/home_menu"
+        app:title="Github Browser"
+        app:titleTextColor="@color/white" />
+
+    <TextView
+        android:id="@+id/track_repo_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Track your favourite repo"
+        android:visibility="gone"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/add_repo_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/track_repo_tv"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
+        android:visibility="gone"
+        android:backgroundTint="@color/black"
+        android:text="Add Now" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/repo_recycler_view"
+        android:visibility="visible"
+        tools:listitem="@layout/single_repo_item"
+        android:layout_below="@id/home_material_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+
+</RelativeLayout>
