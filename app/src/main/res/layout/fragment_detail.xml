@@ -1,97 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".fragment.DetailFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/detail_material_toolbar"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/black"
-        app:menu="@menu/detail_menu"
-        app:navigationIcon="@drawable/ic_back"
-        app:title="Details"
-        app:titleTextColor="@color/white" />
+        android:layout_height="match_parent"
+        tools:context=".fragment.DetailFragment">
 
-    <TextView
-        android:id="@+id/detail_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/detail_material_toolbar"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:text="repository_name"
-        android:textColor="@color/black"
-        android:textSize="20sp" />
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/detail_material_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/black"
+            app:menu="@menu/detail_menu"
+            app:navigationIcon="@drawable/ic_back"
+            app:title="Details"
+            app:titleTextColor="@color/white" />
 
-    <TextView
-        android:id="@+id/detail_description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/detail_title"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="4dp"
-        android:text="Description of repository in 2 lines maximum"
-        android:textColor="@color/black"
-        android:textSize="14sp" />
+        <TextView
+            android:id="@+id/detail_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/detail_material_toolbar"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="repository_name"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
 
-    <View
-        android:id="@+id/horizontal_line"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_below="@id/detail_description"
-        android:layout_marginTop="12dp"
-        android:background="@color/black" />
+        <TextView
+            android:id="@+id/detail_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/detail_title"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="4dp"
+            android:text="Description of repository in 2 lines maximum"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
 
-    <View
-        android:id="@+id/vertical_line"
-        android:layout_width="1dp"
-        android:layout_height="42dp"
-        android:layout_below="@id/horizontal_line"
-        android:layout_centerInParent="true"
-        android:background="@color/black" />
+        <View
+            android:id="@+id/horizontal_line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/detail_description"
+            android:layout_marginTop="12dp"
+            android:background="@color/black" />
 
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_below="@id/horizontal_line"
-        android:layout_marginTop="42dp"
-        android:background="@color/black" />
+        <View
+            android:id="@+id/vertical_line"
+            android:layout_width="1dp"
+            android:layout_height="42dp"
+            android:layout_below="@id/horizontal_line"
+            android:layout_centerInParent="true"
+            android:background="@color/black" />
 
 
-    <TextView
-        android:id="@+id/branches_iv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/horizontal_line"
-        android:layout_alignParentStart="true"
-        android:layout_toStartOf="@+id/vertical_line"
-        android:gravity="center"
-        android:padding="10dp"
-        android:text="Branches"
-        android:textAllCaps="true"
-        android:textColor="@color/black" />
-
-    <TextView
-        android:id="@+id/issue_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/horizontal_line"
-        android:layout_alignStart="@id/vertical_line"
-        android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@id/vertical_line"
-        android:gravity="center"
-        android:padding="10dp"
-        android:text="Issues(0)"
-        android:textAllCaps="true"
-        android:textColor="@color/black" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/horizontal_line"
+            android:layout_marginTop="42dp"
+            android:background="@color/black" />
 
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/branches_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/horizontal_line"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/vertical_line"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="Branches"
+            android:textAllCaps="true"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/issue_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/horizontal_line"
+            android:layout_alignStart="@id/vertical_line"
+            android:layout_alignParentEnd="true"
+            android:layout_toEndOf="@id/vertical_line"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="Issues(0)"
+            android:textAllCaps="true"
+            android:textColor="@color/black" />
+
+
+    </RelativeLayout>
+</layout>

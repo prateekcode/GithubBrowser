@@ -16,5 +16,6 @@ class RepoUtil(private val oldList: List<Repotity>, private val newList: List<Re
         return oldList[oldItemPosition].repositoryName == newList[newItemPosition].repositoryName
                 && oldList[oldItemPosition].descriptionRepo == newList[newItemPosition].descriptionRepo
                 && oldList[oldItemPosition].htmlUrl == newList[newItemPosition].htmlUrl
+                && oldList[oldItemPosition].ownerName == newList[newItemPosition].ownerName
     }
 }

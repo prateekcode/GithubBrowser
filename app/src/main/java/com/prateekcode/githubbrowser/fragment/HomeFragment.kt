@@ -74,7 +74,12 @@ class HomeFragment : Fragment(), RepoAdapter.OnItemClickListener {
     }
 
     override fun onClick(position: Int) {
-        replaceFragment(DetailFragment())
+        replaceFragment(DetailFragment(
+            repoList[position].repositoryName,
+            repoList[position].descriptionRepo,
+            repoList[position].htmlUrl,
+            repoList[position].ownerName
+        ))
     }
 
     override fun onShareButtonClick(position: Int) {

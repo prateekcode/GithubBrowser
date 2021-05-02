@@ -1,37 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".fragment.CommitFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/commit_material_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/black"
-        app:navigationIcon="@drawable/ic_back"
-        app:subtitle="Branch Name"
-        app:subtitleTextColor="@color/white"
-        app:title="Commits"
-        app:titleTextColor="@color/white" />
-
-    <ProgressBar
-        android:id="@+id/commit_progress_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:backgroundTint="@color/black"
-        android:visibility="gone" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/commit_recycler_view"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/commit_material_toolbar"
-        android:visibility="visible"
-        tools:listitem="@layout/commit_single_item" />
+        tools:context=".fragment.CommitFragment">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/commit_material_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/black"
+            app:navigationIcon="@drawable/ic_back"
+            app:subtitle="Branch Name"
+            app:subtitleTextColor="@color/white"
+            app:title="Commits"
+            app:titleTextColor="@color/white" />
+
+        <ProgressBar
+            android:id="@+id/commit_progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:backgroundTint="@color/black"
+            android:visibility="gone" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/commit_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/commit_material_toolbar"
+            android:visibility="visible"
+            tools:listitem="@layout/commit_single_item" />
 
 
-</RelativeLayout>
+    </RelativeLayout>
+</layout>

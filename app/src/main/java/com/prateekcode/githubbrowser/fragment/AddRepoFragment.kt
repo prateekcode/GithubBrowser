@@ -78,7 +78,7 @@ class AddRepoFragment : Fragment() {
                 val htmlUrl = response.body()!!.html_url
                 Log.d(TAG, "Description of the user: ${response.body()!!.description}")
                 Log.d(TAG, "Html Url of the user: ${response.body()!!.html_url}")
-                val repo = Repotity(repoName, descriptionOfRepo, htmlUrl)
+                val repo = Repotity(repoName, descriptionOfRepo, htmlUrl, userName)
                 viewModel!!.insertTheRepo(repo)
                 fragmentManager!!.popBackStack()
             }

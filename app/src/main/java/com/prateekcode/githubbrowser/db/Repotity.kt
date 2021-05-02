@@ -11,5 +11,7 @@ data class Repotity(
     @ColumnInfo(name = "Description")
     val descriptionRepo:String,
     @ColumnInfo(name = "HTML Url")
-    val htmlUrl:String
+    val htmlUrl:String,
+    @ColumnInfo(name = "Owner")
+    val ownerName:String
 )
