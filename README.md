@@ -7,7 +7,7 @@ GitHub Browser apps to search any GitHub Repository, and user can save the repo 
 
 ***Download the latest apk from below 👇***
 
-[![GithubBrowser](https://img.shields.io/badge/GithubBrowser-App%20Download-brightgreen?style=for-the-badge&logo=android)](app/release/app-release.apk)
+[![GithubBrowser](https://img.shields.io/badge/GithubBrowser-App%20Download-brightgreen?style=for-the-badge&logo=android)](https://github.com/prateekcode/GithubBrowser/releases/download/1.0/app-release.apk)
 
 ## Built With 🛠
 * [Kotlin](https://kotlinlang.org/) - Official programming language for Android Development
