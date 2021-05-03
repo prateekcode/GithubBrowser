@@ -11,6 +11,7 @@ import com.prateekcode.githubbrowser.model.commit.CommitItem
 import com.prateekcode.githubbrowser.util.CommitUtil
 import com.prateekcode.githubbrowser.util.Utils
 import kotlinx.android.synthetic.main.commit_single_item.view.*
+import java.lang.NullPointerException
 
 class CommitAdapter : RecyclerView.Adapter<CommitAdapter.CommitViewHolder>() {
 
@@ -22,14 +23,14 @@ class CommitAdapter : RecyclerView.Adapter<CommitAdapter.CommitViewHolder>() {
             itemView.date_text_tv.text =
                 Utils.getFormattedDateFromTimestamp(Utils.getDateToMilliSeconds(commitItem.commit.committer.date))
             itemView.commit_message_tv.text = commitItem.commit.message
-            if (commitItem.commit.committer.name.isNotEmpty()){
+            if (commitItem.commit.committer.name.isNotEmpty()) {
                 itemView.user_name_tv.text = commitItem.commit.committer.name
-            }else{
+            } else {
                 itemView.user_name_tv.text = "Not Available"
             }
-            if (commitItem.committer.avatar_url.isNotEmpty()){
+            try {
                 itemView.avatar_iv.load(commitItem.committer.avatar_url)
-            }else{
+            }catch (e: NullPointerException){
                 itemView.avatar_iv.load(R.drawable.ic_avatar)
             }
             itemView.sha_key_initial.text = Utils.getSixLetterString(commitItem.sha)
