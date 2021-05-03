@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.prateekcode.githubbrowser.R
 import com.prateekcode.githubbrowser.adapter.BranchAdapter
 import com.prateekcode.githubbrowser.databinding.FragmentDetailBinding
@@ -21,6 +23,7 @@ import com.prateekcode.githubbrowser.db.RepoDatabase
 import com.prateekcode.githubbrowser.db.Repodao
 import com.prateekcode.githubbrowser.db.Repotity
 import com.prateekcode.githubbrowser.model.branch.CustomBranch
+import com.prateekcode.githubbrowser.util.Utils
 import com.prateekcode.githubbrowser.viewmodel.ApiViewModel
 import com.prateekcode.githubbrowser.viewmodel.ApiViewModelFactory
 
@@ -47,64 +50,71 @@ class DetailFragment(repoName: String, description: String, htmUrl: String, owne
 
         //Initializing the database
         repodao = RepoDatabase.getDatabase(context!!).repoDao()
-
         binding.detailMaterialToolbar.setNavigationOnClickListener {
             fragmentManager!!.popBackStack()
         }
+        if (Utils.isConnected(context!!)){
+            binding.branchList.adapter = branchAdapter
+            binding.branchList.layoutManager = LinearLayoutManager(context)
 
-        binding.branchList.adapter = branchAdapter
-        binding.branchList.layoutManager = LinearLayoutManager(context)
-
-        val factory = ApiViewModelFactory(repodao)
-        viewModel = ViewModelProvider(this, factory).get(ApiViewModel::class.java)
-        viewModel!!.getBranches(ownerId, repositoryName)
-        viewModel!!.branchResponse.observe(viewLifecycleOwner, { response ->
-            if (response.isSuccessful) {
-                Log.d(TAG, "BRANCH LIST ${response.body()}")
-                branchAdapter.setData(response.body()!!)
-            }
-        })
+            val factory = ApiViewModelFactory(repodao)
+            viewModel = ViewModelProvider(this, factory).get(ApiViewModel::class.java)
+            viewModel!!.getBranches(ownerId, repositoryName)
+            viewModel!!.branchResponse.observe(viewLifecycleOwner, { response ->
+                if (response.isSuccessful) {
+                    Log.d(TAG, "BRANCH LIST ${response.body()}")
+                    branchAdapter.setData(response.body()!!)
+                }
+            })
 
 
-        issueCounter()
-        binding.detailMaterialToolbar.setOnMenuItemClickListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.delete_repo_btn -> {
-                    MaterialAlertDialogBuilder(context!!)
-                        .setTitle("Are you sure?")
-                        .setNegativeButton("Cancel") { dialog, _ ->
-                            dialog.dismiss()
-                        }
-                        .setPositiveButton("Delete") { _, _ ->
-                            viewModel!!.deleteTheRepo(
-                                Repotity(
-                                    repositoryName,
-                                    description,
-                                    htmlUrl,
-                                    ownerId
+            issueCounter()
+            binding.detailMaterialToolbar.setOnMenuItemClickListener { menuItem ->
+                when (menuItem.itemId) {
+                    R.id.delete_repo_btn -> {
+                        MaterialAlertDialogBuilder(context!!)
+                            .setTitle("Are you sure?")
+                            .setNegativeButton("Cancel") { dialog, _ ->
+                                dialog.dismiss()
+                            }
+                            .setPositiveButton("Delete") { _, _ ->
+                                viewModel!!.deleteTheRepo(
+                                    Repotity(
+                                        repositoryName,
+                                        description,
+                                        htmlUrl,
+                                        ownerId
+                                    )
                                 )
-                            )
-                            Toast.makeText(context, "File delete successfully", Toast.LENGTH_SHORT)
-                                .show()
-                            fragmentManager!!.popBackStack()
-                        }
-                        .show()
-                    true
-                }
-                R.id.open_repo_btn -> {
-                    try {
-                        val uri: Uri = Uri.parse("googlechrome://navigate?url=$htmlUrl")
-                        val i = Intent(Intent.ACTION_VIEW, uri)
-                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        startActivity(i)
-                    } catch (e: ActivityNotFoundException) {
-                        Log.d("TAG", "onCreate: $e")
+                                Toast.makeText(context, "File delete successfully", Toast.LENGTH_SHORT)
+                                    .show()
+                                fragmentManager!!.popBackStack()
+                            }
+                            .show()
+                        true
                     }
-                    true
+                    R.id.open_repo_btn -> {
+                        try {
+                            val uri: Uri = Uri.parse("googlechrome://navigate?url=$htmlUrl")
+                            val i = Intent(Intent.ACTION_VIEW, uri)
+                            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            startActivity(i)
+                        } catch (e: ActivityNotFoundException) {
+                            Log.d("TAG", "onCreate: $e")
+                        }
+                        true
+                    }
+                    else -> false
                 }
-                else -> false
             }
+        }else{
+            Snackbar.make(activity!!.findViewById(android.R.id.content), "You're not connected to Internet", Snackbar.LENGTH_INDEFINITE)
+                .setAction("Setting"){
+                    startActivity(Intent(Settings.ACTION_SETTINGS))
+                }
+                .show()
         }
+
 
         return binding.root
     }
@@ -147,6 +157,7 @@ class DetailFragment(repoName: String, description: String, htmUrl: String, owne
 
     companion object {
         const val TAG = "DETAIL_FRAGMENT"
+        const val SETTINGS_PACKAGE = "com.android.settings"
     }
 
 

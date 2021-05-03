@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.prateekcode.githubbrowser.R
 import com.prateekcode.githubbrowser.adapter.RepoAdapter
 import com.prateekcode.githubbrowser.databinding.FragmentHomeBinding
@@ -88,7 +89,11 @@ class HomeFragment : Fragment(), RepoAdapter.OnItemClickListener {
                 }
             }
         }else{
-            Toast.makeText(context, "You're not connected with Internet", Toast.LENGTH_SHORT).show()
+            Snackbar.make(activity!!.findViewById(android.R.id.content), "You're not connected to Internet", Snackbar.LENGTH_INDEFINITE)
+                .setAction("Setting"){
+                    startActivity(Intent(Settings.ACTION_SETTINGS))
+                }
+                .show()
         }
 
         return binding.root

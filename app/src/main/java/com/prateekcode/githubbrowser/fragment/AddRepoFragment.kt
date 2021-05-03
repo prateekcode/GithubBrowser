@@ -1,7 +1,9 @@
 package com.prateekcode.githubbrowser.fragment
 
 
+import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -11,11 +13,13 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.snackbar.Snackbar
 import com.prateekcode.githubbrowser.R
 import com.prateekcode.githubbrowser.databinding.FragmentAddRepoBinding
 import com.prateekcode.githubbrowser.db.RepoDatabase
 import com.prateekcode.githubbrowser.db.Repodao
 import com.prateekcode.githubbrowser.db.Repotity
+import com.prateekcode.githubbrowser.util.Utils
 import com.prateekcode.githubbrowser.viewmodel.ApiViewModel
 import com.prateekcode.githubbrowser.viewmodel.ApiViewModelFactory
 
@@ -36,22 +40,27 @@ class AddRepoFragment : Fragment() {
         //Initializing the database
         repodao = RepoDatabase.getDatabase(context!!).repoDao()
 
-
-
-
         binding.addMaterialToolbar.setNavigationOnClickListener {
             fragmentManager!!.popBackStack()
         }
 
-        binding.addRepositoryBtn.setOnClickListener {
-            if (isEmptyTextInput(binding.ownerEditText) || isEmptyTextInput(binding.repoEditText)){
-                binding.ownerEditText.error ="Enter Username/Organization"
-                binding.repoEditText.error = "Enter Repo Name"
-                Toast.makeText(context, "Enter correct details", Toast.LENGTH_SHORT).show()
-            }else{
-                //Toast.makeText(context, "Repo added", Toast.LENGTH_SHORT).show()
-                findTheRepo(binding.ownerEditText.text.toString(), binding.repoEditText.text.toString())
+        if (Utils.isConnected(context!!)){
+            binding.addRepositoryBtn.setOnClickListener {
+                if (isEmptyTextInput(binding.ownerEditText) || isEmptyTextInput(binding.repoEditText)){
+                    binding.ownerEditText.error ="Enter Username/Organization"
+                    binding.repoEditText.error = "Enter Repo Name"
+                    Toast.makeText(context, "Enter correct details", Toast.LENGTH_SHORT).show()
+                }else{
+                    //Toast.makeText(context, "Repo added", Toast.LENGTH_SHORT).show()
+                    findTheRepo(binding.ownerEditText.text.toString(), binding.repoEditText.text.toString())
+                }
             }
+        }else{
+            Snackbar.make(activity!!.findViewById(android.R.id.content), "You're not connected to Internet", Snackbar.LENGTH_INDEFINITE)
+                .setAction("Setting"){
+                    startActivity(Intent(Settings.ACTION_SETTINGS))
+                }
+                .show()
         }
 
         return binding.root
@@ -67,26 +76,38 @@ class AddRepoFragment : Fragment() {
         viewModel!!.githubRepository(userName, repoName)
         viewModel!!.repoResponse.observe(viewLifecycleOwner, { response ->
             if (response.isSuccessful) {
-                Log.d(TAG, "Name of the user: ${response.body()!!.name}")
-                val repoName = response.body()!!.name
-                var descriptionOfRepo = response.body()!!.description
-                if (descriptionOfRepo == null) {
-                    descriptionOfRepo = "Not Found"
+                if (response.body() != null) {
+                    Log.d(TAG, "Name of the user: ${response.body()!!.name}")
+                    val repoName = response.body()!!.name
+                    var descriptionOfRepo = response.body()!!.description
+                    if (descriptionOfRepo == null) {
+                        descriptionOfRepo = "Not Found"
+                    } else {
+                        descriptionOfRepo
+                    }
+                    val htmlUrl = response.body()!!.html_url
+                    Log.d(TAG, "Description of the user: ${response.body()!!.description}")
+                    Log.d(TAG, "Html Url of the user: ${response.body()!!.html_url}")
+                    val repo = Repotity(repoName, descriptionOfRepo, htmlUrl, userName)
+                    viewModel!!.insertTheRepo(repo)
+                    fragmentManager!!.popBackStack()
                 } else {
-                    descriptionOfRepo
+                    binding.ownerEditText.text.clear()
+                    binding.repoEditText.text.clear()
+                    binding.ownerEditText.error = "Enter Correct Username/Organization"
+                    binding.repoEditText.error = "Enter Correct Repo Name"
+                    Toast.makeText(context, "Owner/Repo not found", Toast.LENGTH_SHORT).show()
                 }
-                val htmlUrl = response.body()!!.html_url
-                Log.d(TAG, "Description of the user: ${response.body()!!.description}")
-                Log.d(TAG, "Html Url of the user: ${response.body()!!.html_url}")
-                val repo = Repotity(repoName, descriptionOfRepo, htmlUrl, userName)
-                viewModel!!.insertTheRepo(repo)
-                fragmentManager!!.popBackStack()
             } else {
                 binding.ownerEditText.text.clear()
                 binding.repoEditText.text.clear()
-                binding.ownerEditText.error ="Enter Correct Username/Organization"
+                binding.ownerEditText.error = "Enter Correct Username/Organization"
                 binding.repoEditText.error = "Enter Correct Repo Name"
                 Toast.makeText(context, "Owner/Repo not found", Toast.LENGTH_SHORT).show()
+                Log.d(TAG, "findTheRepo: Getting the error message ${response.message()}")
+                Log.d(TAG, "findTheRepo: Getting the error message ${response.raw()}")
+                Log.d(TAG, "findTheRepo: Getting the error message ${response.errorBody()}")
+                Log.d(TAG, "findTheRepo: Getting the error message ${response.headers()}")
             }
         })
     }
