@@ -4,6 +4,7 @@ import com.prateekcode.githubbrowser.api.RetrofitInstance
 import com.prateekcode.githubbrowser.db.Repodao
 import com.prateekcode.githubbrowser.db.Repotity
 import com.prateekcode.githubbrowser.model.branch.Branch
+import com.prateekcode.githubbrowser.model.commit.CommitItem
 import com.prateekcode.githubbrowser.model.commit.Commits
 import com.prateekcode.githubbrowser.model.issuedir.IssueCollection
 import com.prateekcode.githubbrowser.model.repo.Repo
@@ -29,7 +30,7 @@ class Repository(private val repodao: Repodao) {
         ownerName: String,
         repoName: String,
         shaKey: String
-    ): Response<Commits> {
+    ): Response<List<CommitItem>> {
         return RetrofitInstance.api.getCommitMessage(ownerName, repoName, shaKey)
     }
 

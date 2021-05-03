@@ -68,11 +68,11 @@ class AddRepoFragment : Fragment() {
         viewModel!!.repoResponse.observe(viewLifecycleOwner, { response ->
             if (response.isSuccessful) {
                 Log.d(TAG, "Name of the user: ${response.body()!!.name}")
-                var repoName = response.body()!!.name
+                val repoName = response.body()!!.name
                 var descriptionOfRepo = response.body()!!.description
-                if (descriptionOfRepo==null){
+                if (descriptionOfRepo == null) {
                     descriptionOfRepo = "Not Found"
-                }else{
+                } else {
                     descriptionOfRepo
                 }
                 val htmlUrl = response.body()!!.html_url
@@ -81,6 +81,12 @@ class AddRepoFragment : Fragment() {
                 val repo = Repotity(repoName, descriptionOfRepo, htmlUrl, userName)
                 viewModel!!.insertTheRepo(repo)
                 fragmentManager!!.popBackStack()
+            } else {
+                binding.ownerEditText.text.clear()
+                binding.repoEditText.text.clear()
+                binding.ownerEditText.error ="Enter Correct Username/Organization"
+                binding.repoEditText.error = "Enter Correct Repo Name"
+                Toast.makeText(context, "Owner/Repo not found", Toast.LENGTH_SHORT).show()
             }
         })
     }

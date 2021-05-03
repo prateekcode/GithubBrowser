@@ -1,6 +1,5 @@
 package com.prateekcode.githubbrowser.util
 
-import android.R
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -8,10 +7,10 @@ import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.view.inputmethod.InputMethodManager
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.min
 
 
 object Utils {
@@ -30,11 +29,35 @@ object Utils {
         )
     }
 
-    fun formatDateTime(epoch: Long): String {
-        val date = Date(epoch)
-        val sdf = SimpleDateFormat("h:mm a", Locale.ENGLISH)
+    fun formatDateTime(dateStr: String): String {
+        val date = Date(dateStr)
+        val sdf = SimpleDateFormat("YYYY-MM-dd", Locale.ENGLISH)
         sdf.timeZone = TimeZone.getDefault()
         return sdf.format(date)
+    }
+
+
+    fun getDateToMilliSeconds(date: String): Long {
+        var timeInMilliseconds:Long=0
+        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+        try {
+            val mDate: Date = sdf.parse(date)
+            timeInMilliseconds = mDate.getTime()
+            println("Date in milli :: $timeInMilliseconds")
+        } catch (e: ParseException) {
+            e.printStackTrace()
+        }
+        return timeInMilliseconds
+    }
+
+    fun getFormattedDateFromTimestamp(timestampInMilliSeconds: Long): String? {
+        val date = Date()
+        date.time = timestampInMilliSeconds
+        return SimpleDateFormat("yyyy-MM-dd").format(date)
+    }
+
+    fun getSixLetterString(commitStr: String):String?{
+        return commitStr.substring(0, min(commitStr.length, 6))
     }
 
     fun clearSharedPreferences(context: Context) {

@@ -1,6 +1,7 @@
 package com.prateekcode.githubbrowser.api
 
 import com.prateekcode.githubbrowser.model.branch.Branch
+import com.prateekcode.githubbrowser.model.commit.CommitItem
 import com.prateekcode.githubbrowser.model.commit.Commits
 import com.prateekcode.githubbrowser.model.issuedir.IssueCollection
 import com.prateekcode.githubbrowser.model.repo.Repo
@@ -33,7 +34,7 @@ interface RestApi {
         @Path("owner") ownerName: String,
         @Path("repo") repoName: String,
         @Query("sha") shaKey:String
-    ): Response<Commits>
+    ): Response<List<CommitItem>>
 
 
     //For Getting the Open Issues

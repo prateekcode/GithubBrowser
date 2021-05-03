@@ -33,9 +33,12 @@ class ExampleUnitTest {
     @Test
     fun getBranches(){
         runBlocking {
-            val branches = instance.api.getBranches("prateekcode", "URLShortner")
+            val branches = instance.api.getBranches("nvbn", "thefuck")
             println(branches)
             println(branches.body())
+            for (i in 0 until branches.body()!!.size){
+                println(branches.body()!![i].name)
+            }
         }
     }
 

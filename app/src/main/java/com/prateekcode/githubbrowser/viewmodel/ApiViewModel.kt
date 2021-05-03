@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.prateekcode.githubbrowser.db.Repotity
 import com.prateekcode.githubbrowser.model.branch.Branch
+import com.prateekcode.githubbrowser.model.commit.CommitItem
 import com.prateekcode.githubbrowser.model.commit.Commits
 import com.prateekcode.githubbrowser.model.issuedir.IssueCollection
 import com.prateekcode.githubbrowser.model.repo.Repo
@@ -31,7 +32,16 @@ class ApiViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
-    var commitMessageResponse: MutableLiveData<Response<Commits>> = MutableLiveData()
+    val branchList = MutableLiveData<ArrayList<String>>(arrayListOf())
+    fun itemInBranchList(branchResponse: Response<Branch>){
+        val list = branchList.value
+        for (i in 0 until branchResponse.body()!!.size){
+            list!!.add(branchResponse.body()!![i].name)
+        }
+        branchList.value = list
+    }
+
+    var commitMessageResponse: MutableLiveData<Response<List<CommitItem>>> = MutableLiveData()
     fun getCommitMessage(ownerName: String, repoName: String, shaKey: String) {
         viewModelScope.launch {
             val response = repository.getCommitMessage(ownerName, repoName, shaKey)
