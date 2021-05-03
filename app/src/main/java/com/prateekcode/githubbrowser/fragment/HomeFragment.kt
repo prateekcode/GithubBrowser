@@ -2,18 +2,21 @@ package com.prateekcode.githubbrowser.fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.prateekcode.githubbrowser.R
 import com.prateekcode.githubbrowser.adapter.RepoAdapter
 import com.prateekcode.githubbrowser.databinding.FragmentHomeBinding
 import com.prateekcode.githubbrowser.db.RepoDatabase
 import com.prateekcode.githubbrowser.db.Repodao
 import com.prateekcode.githubbrowser.db.Repotity
+import com.prateekcode.githubbrowser.util.Utils
 import com.prateekcode.githubbrowser.viewmodel.ApiViewModel
 import com.prateekcode.githubbrowser.viewmodel.ApiViewModelFactory
 
@@ -32,43 +35,61 @@ class HomeFragment : Fragment(), RepoAdapter.OnItemClickListener {
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
 
-        //Initializing the database
-        repodao = RepoDatabase.getDatabase(context!!).repoDao()
-        val factory = ApiViewModelFactory(repodao)
-        viewModel = ViewModelProvider(this, factory).get(ApiViewModel::class.java)
 
-        repoList = repodao.getAllRepo()
-        if (repoList.isEmpty()){
-            binding.trackRepoTv.visibility = View.VISIBLE
-            binding.addRepoButton.visibility = View.VISIBLE
-        }else{
-            binding.trackRepoTv.visibility = View.GONE
-            binding.addRepoButton.visibility = View.GONE
-        }
+        if (Utils.isConnected(context!!)){
+            //Initializing the database
+            repodao = RepoDatabase.getDatabase(context!!).repoDao()
+            val factory = ApiViewModelFactory(repodao)
+            viewModel = ViewModelProvider(this, factory).get(ApiViewModel::class.java)
 
-        binding.addRepoButton.setOnClickListener {
-            //Toast.makeText(context, "Hey Buddy!!!!!!", Toast.LENGTH_SHORT).show()
-            replaceFragment(AddRepoFragment())
-        }
-
-        repoAdapter.setData(repoList)
-        val layoutManager = LinearLayoutManager(context!!)
-        binding.repoRecyclerView.layoutManager = layoutManager
-        binding.repoRecyclerView.adapter = repoAdapter
-        layoutManager.stackFromEnd = true
-        layoutManager.reverseLayout = true
-
-        binding.homeMaterialToolbar.setOnMenuItemClickListener {
-                menuItem ->
-            when (menuItem.itemId) {
-                R.id.add_repo_menu_btn -> {
-                    replaceFragment(AddRepoFragment())
-                    true
-                }
-                else -> false
+            repoList = repodao.getAllRepo()
+            if (repoList.isEmpty()){
+                binding.trackRepoTv.visibility = View.VISIBLE
+                binding.addRepoButton.visibility = View.VISIBLE
+            }else{
+                binding.trackRepoTv.visibility = View.GONE
+                binding.addRepoButton.visibility = View.GONE
+                repoAdapter.setData(repoList)
+                val layoutManager = LinearLayoutManager(context!!)
+                binding.repoRecyclerView.layoutManager = layoutManager
+                binding.repoRecyclerView.adapter = repoAdapter
+                layoutManager.stackFromEnd = true
+                layoutManager.reverseLayout = true
             }
-        }
 
+            binding.addRepoButton.setOnClickListener {
+                //Toast.makeText(context, "Hey Buddy!!!!!!", Toast.LENGTH_SHORT).show()
+                replaceFragment(AddRepoFragment())
+            }
+
+            binding.homeMaterialToolbar.setOnMenuItemClickListener {
+                    menuItem ->
+                when (menuItem.itemId) {
+                    R.id.add_repo_menu_btn -> {
+                        replaceFragment(AddRepoFragment())
+                        true
+                    }
+                    R.id.delete_all-> {
+                        MaterialAlertDialogBuilder(context!!)
+                            .setTitle("Delete All Repo")
+                            .setMessage("Are you sure?")
+                            .setNegativeButton("Cancel") { dialog, _ ->
+                                dialog.dismiss()
+                            }
+                            .setPositiveButton("Delete") { _, _ ->
+                                viewModel!!.deleteEntireDb()
+                                Toast.makeText(context, "Entire repo deleted", Toast.LENGTH_SHORT)
+                                    .show()
+                            }
+                            .show()
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }else{
+            Toast.makeText(context, "You're not connected with Internet", Toast.LENGTH_SHORT).show()
+        }
 
         return binding.root
     }

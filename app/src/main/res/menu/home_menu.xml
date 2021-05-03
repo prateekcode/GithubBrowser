@@ -4,8 +4,14 @@
 
     <item
         android:id="@+id/add_repo_menu_btn"
-        android:title="Add Repo"
         android:icon="@drawable/ic_add"
-        app:showAsAction="always"/>
+        android:title="Add Repo"
+        app:showAsAction="always" />
+
+    <item
+        android:icon="@drawable/ic_delete_all"
+        android:id="@+id/delete_all"
+        android:title="Delete All Repo"
+        app:showAsAction="always" />
 
 </menu>
