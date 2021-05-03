@@ -21,7 +21,7 @@ GitHub Browser apps to search any GitHub Repository, and user can save the repo 
 * [Coil](https://github.com/coil-kt/coil) - Image Loading library
 * [Circle Image View](https://github.com/hdodenhof/CircleImageView) - A fast circular ImageView perfect for profile images.
 * [Material Components](https://material.io/develop/android) - To build beautiful, usable products using Material Components for Android
-* [JUnit For Unit Testing]
+* [JUnit For Unit Testing](https://junit.org/junit5/) - For Unit Testing
 
 ## Screenshots 📸
 ![alt-text](Screenshots/github_browser_ss.png "Screenshot")
